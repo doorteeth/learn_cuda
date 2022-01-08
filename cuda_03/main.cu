@@ -44,10 +44,10 @@ int main()
 
     float *d_A, *d_B, *d_C;
 
-    cudaMalloc((float **)d_A, nBytes);
-    cudaMalloc((float **)d_B, nBytes);
-    cudaMalloc((float **)d_C, nBytes);
-
+    cudaMalloc((float **)&d_A, nBytes);
+    cudaMalloc((float **)&d_B, nBytes);
+    cudaMalloc((float **)&d_C, nBytes);
+//
     initialData(h_A, nElem);
     initialData(h_B, nElem);
 
@@ -55,19 +55,21 @@ int main()
     cudaMemcpy(d_B, h_B, nBytes, cudaMemcpyHostToDevice);
 
     sumArraysOnHost(h_A, h_B, h_C, nElem);
-    sumArraysOnDevice<<<3,3>>>(d_A, d_B, d_C, nElem);
-
-    cudaMemcpy(h_out, d_C, nBytes, cudaMemcpyHostToDevice);
+    sumArraysOnDevice<<<1,1>>>(d_A, d_B, d_C, nElem);
 
 
-    int count=0;
+    cudaDeviceSynchronize();
+    cudaMemcpy(h_out, d_C, nBytes, cudaMemcpyDeviceToHost);
+
+
+    double epsilon=1.0E-8;
 
     for (int i = 0; i < nElem; ++i)
     {
-        if (h_out[i]!=h_C[i])
+        if (abs(h_out[i]-h_C[i])>epsilon)
         {
             std::cout<<"Failure"<<std::endl;
-            exit(0);
+            return 1;
         }
     }
     std::cout<<"Success"<<std::endl;
