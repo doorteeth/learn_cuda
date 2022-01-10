@@ -1,9 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
-project(learn_cuda CUDA)
+add_executable(cuda_04 main.cu)
 
-set(CMAKE_CUDA_STANDARD 14)
-
-add_executable(learn_cuda main.cu)
-
-set_target_properties(learn_cuda PROPERTIES
+set_target_properties(cuda_04 PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON)
