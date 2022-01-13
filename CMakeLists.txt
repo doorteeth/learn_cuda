@@ -13,5 +13,6 @@ add_subdirectory(cuda_04)
 add_subdirectory(cuda_05)
 add_subdirectory(cuda_06)
 add_subdirectory(cuda_08)
+add_subdirectory(cuda_09)
 
 
